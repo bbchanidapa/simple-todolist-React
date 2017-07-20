@@ -5,6 +5,7 @@ class List extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      todos: JSON.parse(localStorage.getItem('data')) || [],
       isGoing: false,
       mode: ''
     }
@@ -42,7 +43,6 @@ class List extends Component {
         edit(list[i])
       }
     }
-		
   }
   onDelete(event) {
    const list = JSON.parse(localStorage.getItem('data')) || []
@@ -50,16 +50,19 @@ class List extends Component {
     for(const i in  list){
       if(list[i].id === Number(event.target.id) ){
         list.splice(i,1)
+        this.setState({
+              todos: list
+        })
         localStorage.setItem('data', JSON.stringify(list))
       }
     }
   }
 
   render() {
-    const list = JSON.parse(localStorage.getItem('data')) || []
+    const {todos} = this.state
     return (
       <div style={{ height: 300, background: '#f1efef', color: '#000' }}>
-         { list.map((data, index) => (
+         { todos.map((data, index) => (
           <div key={data.id} style={{ padding: 3 }}>
             <div>
               { data.status ?
